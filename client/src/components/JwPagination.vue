@@ -93,10 +93,10 @@ const defaultStyles = {
 };
 
 export default {
-  emits: ["changePage",'newitems'],
+  emits: ["changePage", "newitems"],
   props: {
-    total:{
-       type:Number
+    total: {
+      type: Number,
     },
     items: {
       type: Array,
@@ -135,8 +135,6 @@ export default {
     };
   },
   created() {
-
-
     // set default styles unless disabled
     if (!this.disableDefaultStyles) {
       this.ulStyles = defaultStyles.ul;
@@ -156,32 +154,28 @@ export default {
   },
   methods: {
     setPage(page) {
-        
       this.$emit("newitems", page);
-      
-      const { items, pageSize, maxPages,total } = this;
-     
-      
+
+      const { items, pageSize, maxPages, total } = this;
+
       // get new pager object for specified page
       if (items) {
         const pager = paginate(total, page, pageSize, maxPages);
-        
+
         // get new page of items from items array
         const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
 
         // update pager
         this.pager = pager;
-         // emit change page event to parent component
-      this.$emit("changePage", pageOfItems, page);
+        // emit change page event to parent component
+        this.$emit("changePage", pageOfItems, page);
       }
-
-     
     },
   },
   watch: {
-            total () {
-                this.setPage(this.initialPage);
-            }
-        }
+    total() {
+      this.setPage(this.initialPage);
+    },
+  },
 };
 </script>
