@@ -1,0 +1,22 @@
+create database employee_db;
+
+use employee_db;
+
+
+create table employee(
+id INT PRIMARY KEY AUTO_INCREMENT,
+firstName VARCHAR(100) NOT NULL,
+lastName VARCHAR(100),
+email VARCHAR(100) UNIQUE,
+empId VARCHAR(5) NOT NULL UNIQUE,
+department VARCHAR(30),
+designation VARCHAR(50),
+projectCount INT,  
+joiningDate DATE
+);
+
+
+
+
+
+
