@@ -140,13 +140,13 @@ export default {
         }
         if(activeSort==='activeSortDate'){
            this.activeSortDate=!this.activeSortDate
-           this.sortItems('joiningDate',this.activeSortEmail)
+           this.sortItems('joiningDate',this.activeSortDate)
           this.getEmployees()
         }
 
         if(activeSort==='activeSortCount'){
           this.activeSortCount=!this.activeSortCount
-          this.sortItems('projectCount',this.activeSortEmail)
+          this.sortItems('projectCount',this.activeSortCount)
           this.getEmployees()
         }
          
@@ -167,8 +167,7 @@ export default {
         }
         else{
           this.sort=filterSort(this.sort,sort)
-          // console.log('filter',filterSort(this.sort,sort))
-          // console.log('Inside',this.sort)
+          
           this.sort.push([sort,'ASC'])
         }
       }
@@ -176,13 +175,6 @@ export default {
 
   },
 
-  // watch: {
-  //   page1(value) {
-  //     if (value === 1) {
-  //       this.disabledPrevious = true;
-  //     }
-  //   },
-  // },
 
   created() {
    

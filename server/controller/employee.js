@@ -4,25 +4,11 @@ const { Op } = require("sequelize");
 var Employee=db.employee
 
 
-
-// const count=async()=>{
-//     try{
-//         const amount = await Employee.count()
-//         console.log("amount",amount)
-//         return amount
-//     } 
-//     catch(e){
-//         console.log(e)
-//         // res.send('Error')
-//     }  
- 
-// }
-
 const getEmployees=async(req,res)=>{
     try{
          const search=req.query.search || ''
          const skip=req.query.page
-         console.log(req.query.sort)
+        //  console.log(req.query.sort)
         const sort=req.query.sort || [['firstname','ASC']]  
 
          const employees = await Employee.findAndCountAll({
