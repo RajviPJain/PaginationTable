@@ -1,5 +1,7 @@
 <template>
   <div class="container border shadow-sm bg-body rounded">
+    <h1>Employees</h1>
+    <button class="btn btn-primary d-flex justify-content-start" @click="reset">Reset Filter</button>
     <div class="input-group mb-3 p-2 d-flex justify-content-end">
       <input
         type="text"
@@ -22,7 +24,7 @@
               :class="
                 activeSortId ? 'bi bi-chevron-compact-up' : 'bi bi-chevron-down'
               "
-              @click="sortData('activeSortId')"
+              @click="  this.activeSortId = !this.activeSortId; sortItems('empId',activeSortId)"
             ></i>
           </th>
           <th scope="col">
@@ -32,7 +34,7 @@
                   ? 'bi bi-chevron-compact-up'
                   : 'bi bi-chevron-down'
               "
-              @click="sortData('activeSortName')"
+              @click="this.activeSortName = !this.activeSortName; sortItems('firstname',activeSortName)"
             ></i>
           </th>
           <th scope="col">
@@ -42,7 +44,7 @@
                   ? 'bi bi-chevron-compact-up'
                   : 'bi bi-chevron-down'
               "
-              @click="sortData('activeSortEmail')"
+              @click="activeSortEmail!=activeSortEmail; sortItems('email',activeSortEmail)"
             ></i>
           </th>
           <th scope="col">DEPARTMENT</th>
@@ -54,7 +56,7 @@
                   ? 'bi bi-chevron-compact-up'
                   : 'bi bi-chevron-down'
               "
-              @click="sortData('activeSortDate')"
+              @click="activeSortDate=!activeSortDate; sortItems('joiningData',activeSortDate)"
             ></i>
           </th>
           <th scope="col">
@@ -64,7 +66,7 @@
                   ? 'bi bi-chevron-compact-up'
                   : 'bi bi-chevron-down'
               "
-              @click="sortData('activeSortCount')"
+              @click="activeSortCount=!activeSortCount; sortItems('projectCount',activeSortCount)"
             ></i>
           </th>
         </tr>
@@ -105,11 +107,11 @@ export default {
       search: "",
       total: null,
       pageOfItems: [],
-      activeSortId: true,
-      activeSortName: true,
-      activeSortEmail: true,
-      activeSortDate: true,
-      activeSortCount: true,
+      activeSortId: false,
+      activeSortName: false,
+      activeSortEmail: false,
+      activeSortDate:false,
+      activeSortCount: false,
 
       sortBy: {},
       sort: [],
@@ -125,15 +127,25 @@ export default {
     // }
   },
   methods: {
+    reset(){
+          this.sort=[]
+          this.activeSortId=false
+      this.activeSortName=false
+      this.activeSortEmail=false
+      this.activeSortDate=false
+      this.activeSortCount=false
+
+      this.getEmployees()
+    },
     async getEmployees() {
-      console.log("fikter", this.page);
+
 
       await api
         .get("/", {
           params: { page: this.page, search: this.search, sort: this.sort },
         })
         .then((response) => {
-          console.log("response page: ", this.page);
+          
           this.employees = response.data.rows;
 
           this.total = response.data.count;
@@ -148,44 +160,11 @@ export default {
       this.pageOfItems = pageOfItems;
     },
     newItems(page) {
-      console.log("inNewItems: ", page, this.page);
+     
       this.page = page;
       this.getEmployees();
     },
-    sortData(activeSort) {
-      console.log(activeSort);
-      if (activeSort === "activeSortId") {
-        this.activeSortId = !this.activeSortId;
-
-        this.sortItems("empId", this.activeSortId);
-        console.log(this.sort);
-        this.getEmployees();
-      }
-      if (activeSort === "activeSortName") {
-        this.activeSortName = !this.activeSortName;
-        this.sortItems("firstname", this.activeSortName);
-        console.log(this.sort);
-        this.getEmployees();
-      }
-      if (activeSort === "activeSortEmail") {
-        this.activeSortEmail = !this.activeSortEmail;
-        this.sortItems("email", this.activeSortEmail);
-        this.getEmployees();
-      }
-      if (activeSort === "activeSortDate") {
-        this.activeSortDate = !this.activeSortDate;
-        this.sortItems("joiningDate", this.activeSortDate);
-        this.getEmployees();
-      }
-
-      if (activeSort === "activeSortCount") {
-        this.activeSortCount = !this.activeSortCount;
-        this.sortItems("projectCount", this.activeSortCount);
-        this.getEmployees();
-      }
-
-      //  this.sort=this.sort.push()
-    },
+  
     sortItems(sort, activeSort) {
       function filterSort(arr, value) {
         return arr.filter((subArray) =>
@@ -193,13 +172,15 @@ export default {
         );
       }
       if (activeSort) {
-        console.log("filter", filterSort(this.sort, sort));
+      
         this.sort = filterSort(this.sort, sort);
         this.sort.push([sort, "DESC"]);
+        this.getEmployees();
       } else {
         this.sort = filterSort(this.sort, sort);
 
         this.sort.push([sort, "ASC"]);
+        this.getEmployees();
       }
     },
   },
